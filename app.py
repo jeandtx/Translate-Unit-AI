@@ -1,7 +1,7 @@
 # Normal imports
 import os
 import streamlit as st
-from utils import get_genai_model, get_translation
+from utils import get_genai_model, get_translation, translate, PROMPT_TRANSLATE
 
 
 # API KEYS
@@ -12,7 +12,7 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 
 def main():
-    model = get_genai_model(GOOGLE_API_KEY)
+    model = get_genai_model(GOOGLE_API_KEY, tools=[translate])
 
     st.title("Translate Unit AI")
 
@@ -31,7 +31,7 @@ def main():
             with st.spinner("Translating..."):
                 response = get_translation(
                     image=uploaded_file,
-                    prompt="Find the price of this item and convert it to Dollars",
+                    prompt=PROMPT_TRANSLATE,
                     model=model,
                 )
             st.success("Translation completed")
