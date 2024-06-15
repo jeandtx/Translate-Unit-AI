@@ -1,25 +1,19 @@
+# Normal imports
+import os
 import streamlit as st
-import PIL.Image
-import google.generativeai as genai
+from utils import get_genai_model, get_translation
 
-from streamlit.runtime.uploaded_file_manager import UploadedFile
 
-GOOGLE_API_KEY = "***REMOVED***"
+# API KEYS
+from dotenv import load_dotenv
 
-def get_genai_model(GOOGLE_API_KEY: str) -> genai.GenerativeModel:
-    genai.configure(api_key=GOOGLE_API_KEY)
-    model = genai.GenerativeModel('gemini-1.5-flash')
-    return model
-    
-def get_translation(image: UploadedFile, prompt: str, model: genai.GenerativeModel) -> str:
-    img = PIL.Image.open(image)
-    response = model.generate_content([prompt, img])
-    return response
+load_dotenv()
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 
 def main():
     model = get_genai_model(GOOGLE_API_KEY)
-    
+
     st.title("Translate Unit AI")
 
     st.write("")
@@ -30,16 +24,20 @@ def main():
     )
 
     response = ""
-    
+
     if uploaded_file is not None:
         st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
         if st.button("Translate"):
             with st.spinner("Translating..."):
-                response = get_translation(image=uploaded_file, prompt="Find the price of this item and convert it to Dollars", model=model)
+                response = get_translation(
+                    image=uploaded_file,
+                    prompt="Find the price of this item and convert it to Dollars",
+                    model=model,
+                )
             st.success("Translation completed")
     else:
         st.button("Translate", disabled=True)
-        
+
     st.write(response)
 
 
