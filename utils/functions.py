@@ -1,6 +1,8 @@
 """DECLARE FUNCTIONS HERE"""
 
 import google.generativeai as genai
+import numpy as np
+import cv2
 
 from PIL import Image
 from streamlit.runtime.uploaded_file_manager import UploadedFile
@@ -41,3 +43,26 @@ def get_translation(
     img = Image.open(image)
     response = model.generate_content([prompt, img])
     return response
+
+
+def detect_motion(
+    frame1: np.ndarray, frame2: np.ndarray, threshold: int = 5000
+) -> bool:
+    """Detect motion between two frames
+
+    Args:
+        frame1 (np.ndarray): The first frame
+        frame2 (np.ndarray): The second frame
+        threshold (int, optional): The threshold. Defaults to 5000.
+
+    Returns:
+        bool: True if motion is detected, False otherwise
+    """
+    diff = cv2.absdiff(frame1, frame2)
+    gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
+    blur = cv2.GaussianBlur(gray, (5, 5), 0)
+    _, thresh = cv2.threshold(blur, 20, 255, cv2.THRESH_BINARY)
+    dilated = cv2.dilate(thresh, None, iterations=3)
+    contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    motion = sum(cv2.contourArea(contour) for contour in contours)
+    return motion > threshold
