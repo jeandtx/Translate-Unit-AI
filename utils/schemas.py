@@ -17,7 +17,7 @@ source_item = genai.protos.Schema(
 )
 
 target_item = genai.protos.Schema(
-    description="Item after translation",
+    description="Item after translation.",
     type=genai.protos.Type.OBJECT,
     properties={
         "unit": genai.protos.Schema(
@@ -31,7 +31,7 @@ target_item = genai.protos.Schema(
 )
 
 price = genai.protos.Schema(
-    description="Price object",
+    description="Price object. Always provide both source and target objects.",
     type=genai.protos.Type.OBJECT,
     properties={
         "source": source_item,
