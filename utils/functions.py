@@ -7,6 +7,7 @@ import cv2
 from PIL import Image
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 from google.generativeai.types import content_types
+from utils.constants import UNIT_COUNTRY_MAPPING
 
 
 def get_genai_model(
@@ -66,3 +67,15 @@ def detect_motion(
     contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     motion = sum(cv2.contourArea(contour) for contour in contours)
     return motion > threshold
+
+
+def get_units_from_country(country: str) -> dict:
+    """Get the units from a country
+
+    Args:
+        country (str): The country
+
+    Returns:
+        dict: The units from the country
+    """
+    return UNIT_COUNTRY_MAPPING[country]

@@ -6,6 +6,7 @@ from utils import (
     detect_motion,
     translate,
     PROMPT_TRANSLATE,
+    get_units_from_country,
 )
 import cv2
 from PIL import Image
@@ -23,6 +24,22 @@ def main():
     st.title("Translate Unit AI")
     st.write("")
     st.write("This is a simple application to translate any units in images")
+
+    country = st.sidebar.selectbox(
+        "Where are you from?",
+        [
+            "United States",
+            "United Kingdom",
+            "Canada",
+            "Australia",
+            "India",
+            "China",
+            "Japan",
+            "South Korea",
+            "Russia",
+            "Brazil",
+        ],
+    )
 
     if "camera_active" not in st.session_state:
         st.session_state.camera_active = False
@@ -96,9 +113,21 @@ def main():
     if image_to_display is not None:
         if st.button("Translate"):
             with st.spinner("Translating..."):
+                country_units = get_units_from_country(country)
                 response = get_translation(
                     image=image_to_display,
-                    prompt=PROMPT_TRANSLATE,
+                    prompt=PROMPT_TRANSLATE.format(
+                        country=country,
+                        price=country_units["price"],
+                        distance=country_units["distance"],
+                        weight=country_units["weight"],
+                        length=country_units["length"],
+                        volume=country_units["volume"],
+                        temperature=country_units["temperature"],
+                        area=country_units["area"],
+                        speed=country_units["speed"],
+                        footwear=country_units["footwear"],
+                    ),
                     model=model,
                 )
             st.success("Translation completed")
