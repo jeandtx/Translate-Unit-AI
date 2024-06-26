@@ -52,8 +52,12 @@ def main():
         "Choose an image file", type=["jpg", "jpeg", "png"], accept_multiple_files=False
     )
     if uploaded_file is not None:
-        st.session_state.screenshot_buffer = None
+        # st.session_state.screenshot_buffer = None
         st.session_state.uploaded_file_buffer = uploaded_file
+
+    if st.button('Clear Image'):
+        st.session_state.uploaded_file_buffer = None
+        st.session_state.screenshot_buffer = None
 
     if st.button("Use Webcam / Restart Camera"):
         st.session_state.screenshot_buffer = None
@@ -68,6 +72,7 @@ def main():
         else:
             last_frame = None
             stable_counter = 0
+            st.session_state.uploaded_file_buffer = None
 
             while True:
                 ret, frame = cap.read()
@@ -101,10 +106,13 @@ def main():
 
                 last_frame = frame
 
+    print('UPLOADER',st.session_state.uploaded_file_buffer)
+    print('CAMERA', st.session_state.screenshot_buffer)
     image_to_display = (
-        st.session_state.uploaded_file_buffer
-        if st.session_state.uploaded_file_buffer
-        else st.session_state.screenshot_buffer
+        # st.session_state.uploaded_file_buffer
+        # if st.session_state.uploaded_file_buffer
+        # else st.session_state.screenshot_buffer
+        st.session_state.screenshot_buffer if st.session_state.screenshot_buffer else st.session_state.uploaded_file_buffer
     )
     if image_to_display:
         st.image(image_to_display, caption="Image to Translate", use_column_width=True)
