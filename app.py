@@ -138,11 +138,13 @@ def main():
                     ),
                     model=model,
                 )
+
             st.success("Translation completed")
     else:
         st.button("Translate", disabled=True)
 
-    st.write(response)
+    import json
+    st.json(json.loads(json.dumps(response, indent=4)))
 
 
 if __name__ == "__main__":

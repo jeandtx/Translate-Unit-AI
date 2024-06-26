@@ -3,6 +3,7 @@
 import google.generativeai as genai
 import numpy as np
 import cv2
+import json
 
 from PIL import Image
 from streamlit.runtime.uploaded_file_manager import UploadedFile
@@ -42,8 +43,9 @@ def get_translation(
         str: The translation of the image
     """
     img = Image.open(image)
-    response = model.generate_content([prompt, img])
-    return response
+    fc = model.generate_content([prompt, img]).candidates[0].content.parts[0].function_call
+    resonse_json = json.dumps(type(fc).to_dict(fc), indent=4)
+    return resonse_json
 
 
 def detect_motion(
