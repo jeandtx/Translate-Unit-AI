@@ -1,0 +1,17 @@
+{
+    "name": "translate",
+    "args": {
+        "prices": [
+            {
+                "target": {
+                    "value": 9.33,
+                    "unit": "GBP"
+                },
+                "source": {
+                    "value": 10.89,
+                    "unit": "\u20ac"
+                }
+            }
+        ]
+    }
+}

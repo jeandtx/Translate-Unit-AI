@@ -11,7 +11,8 @@ from utils import (
 import cv2
 from PIL import Image
 import io
-
+import json
+import pandas as pd
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -106,12 +107,9 @@ def main():
 
                 last_frame = frame
 
-    print('UPLOADER',st.session_state.uploaded_file_buffer)
-    print('CAMERA', st.session_state.screenshot_buffer)
+    # print('UPLOADER',st.session_state.uploaded_file_buffer)
+    # print('CAMERA', st.session_state.screenshot_buffer)
     image_to_display = (
-        # st.session_state.uploaded_file_buffer
-        # if st.session_state.uploaded_file_buffer
-        # else st.session_state.screenshot_buffer
         st.session_state.screenshot_buffer if st.session_state.screenshot_buffer else st.session_state.uploaded_file_buffer
     )
     if image_to_display:
@@ -143,8 +141,31 @@ def main():
     else:
         st.button("Translate", disabled=True)
 
-    import json
-    st.json(json.loads(json.dumps(response, indent=4)))
+    data = json.dumps(response, indent=4)
+    # write data to a json file
+    with open('response.json', 'w') as f:
+        f.write(json.loads(data))
+    
+    df = pd.DataFrame(columns=['source', 'target'])
+
+    with open('response.json', 'r') as f:
+        data = json.load(f)
+        for element in data['args']:
+            # print(element)
+            # print(data['args'][element])
+            for obj in data['args'][element]:
+                # print('target', obj['target'])
+                # print('source', obj['source'])
+
+                # new_row = {'source': obj['source'], 'target': obj['target']}
+                new_row = {'source': str(obj['source']['value']) + ' ' + str(obj['source']['unit']), 'target': str(obj['target']['value']) + ' ' + str(obj['target']['unit'])}
+
+                df = pd.concat([df, pd.DataFrame([new_row])])
+
+    if df is not None:
+        st.table(df)
+
+    # st.json(json.loads(json.dumps(response, indent=4)))
 
 
 if __name__ == "__main__":
