@@ -4,6 +4,7 @@ import google.generativeai as genai
 import numpy as np
 import cv2
 import json
+import pandas as pd
 
 from PIL import Image
 from streamlit.runtime.uploaded_file_manager import UploadedFile
@@ -81,3 +82,26 @@ def get_units_from_country(country: str) -> dict:
         dict: The units from the country
     """
     return UNIT_COUNTRY_MAPPING[country]
+
+
+def get_df(response: str) -> pd.DataFrame:
+    """Get the DataFrame from the response
+
+    Args:
+        response (str): The response
+
+    Returns:
+        pd.DataFrame: The DataFrame
+    """
+    data = json.loads(response)
+    df = pd.DataFrame(columns=['source', 'target'])
+
+    for element in data['args']:
+        for obj in data['args'][element]:
+            new_row = {'source': str(obj['source']['value']) + ' ' + str(obj['source']['unit']), 'target': str(obj['target']['value']) + ' ' + str(obj['target']['unit'])}
+
+            df = pd.concat([df, pd.DataFrame([new_row])])
+
+    return df
+
+    

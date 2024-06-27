@@ -4,6 +4,7 @@ from utils import (
     get_genai_model,
     get_translation,
     detect_motion,
+    get_df,
     translate,
     PROMPT_TRANSLATE,
     get_units_from_country,
@@ -11,7 +12,8 @@ from utils import (
 import cv2
 from PIL import Image
 import io
-
+import json
+import pandas as pd
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -106,12 +108,7 @@ def main():
 
                 last_frame = frame
 
-    print('UPLOADER',st.session_state.uploaded_file_buffer)
-    print('CAMERA', st.session_state.screenshot_buffer)
     image_to_display = (
-        # st.session_state.uploaded_file_buffer
-        # if st.session_state.uploaded_file_buffer
-        # else st.session_state.screenshot_buffer
         st.session_state.screenshot_buffer if st.session_state.screenshot_buffer else st.session_state.uploaded_file_buffer
     )
     if image_to_display:
@@ -140,11 +137,11 @@ def main():
                 )
 
             st.success("Translation completed")
+            df = get_df(response)
+            if df is not None:
+                st.table(df)
     else:
         st.button("Translate", disabled=True)
-
-    import json
-    st.json(json.loads(json.dumps(response, indent=4)))
 
 
 if __name__ == "__main__":
