@@ -25,8 +25,8 @@ def get_genai_model(
     """
     genai.configure(api_key=GOOGLE_API_KEY)
     if tools:
-        return genai.GenerativeModel(model_name="gemini-1.5-flash", tools=tools)
-    return genai.GenerativeModel(model_name="gemini-1.5-flash")
+        return genai.GenerativeModel(model_name="gemini-1.5-pro", tools=tools)
+    return genai.GenerativeModel(model_name="gemini-1.5-pro")
 
 
 def get_translation(

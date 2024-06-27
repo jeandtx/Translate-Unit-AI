@@ -23,4 +23,6 @@ Here are the units I use in my country:
 - Your job is important, be accurate.
 - Don't be lazy, translate all the units.
 
-**Tips: Use the tools provided to help you translate the units.**"""
+**Tips: Use the tools provided to help you translate the units.**
+e.g. "target":"value":79"unit":"miles per hour""source":"value":127"unit":"km/h"
+"""
