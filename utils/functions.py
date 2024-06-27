@@ -50,14 +50,14 @@ def get_translation(
 
 
 def detect_motion(
-    frame1: np.ndarray, frame2: np.ndarray, threshold: int = 5000
+    frame1: np.ndarray, frame2: np.ndarray, threshold: int = 1000
 ) -> bool:
     """Detect motion between two frames
 
     Args:
         frame1 (np.ndarray): The first frame
         frame2 (np.ndarray): The second frame
-        threshold (int, optional): The threshold. Defaults to 5000.
+        threshold (int, optional): The threshold. Defaults to 1000.
 
     Returns:
         bool: True if motion is detected, False otherwise

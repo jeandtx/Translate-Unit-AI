@@ -87,7 +87,7 @@ def main():
                 if last_frame is not None:
                     if not detect_motion(last_frame, frame):
                         stable_counter += 1
-                        if stable_counter > 50:
+                        if stable_counter > 35:
                             # Take a screenshot & add the screenshot to the file uploader
                             screenshot = frame_rgb
                             screenshot_buffer = io.BytesIO()
