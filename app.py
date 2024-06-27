@@ -4,6 +4,7 @@ from utils import (
     get_genai_model,
     get_translation,
     detect_motion,
+    get_df,
     translate,
     PROMPT_TRANSLATE,
     get_units_from_country,
@@ -107,8 +108,6 @@ def main():
 
                 last_frame = frame
 
-    # print('UPLOADER',st.session_state.uploaded_file_buffer)
-    # print('CAMERA', st.session_state.screenshot_buffer)
     image_to_display = (
         st.session_state.screenshot_buffer if st.session_state.screenshot_buffer else st.session_state.uploaded_file_buffer
     )
@@ -138,34 +137,11 @@ def main():
                 )
 
             st.success("Translation completed")
+            df = get_df(response)
+            if df is not None:
+                st.table(df)
     else:
         st.button("Translate", disabled=True)
-
-    data = json.dumps(response, indent=4)
-    # write data to a json file
-    with open('response.json', 'w') as f:
-        f.write(json.loads(data))
-    
-    df = pd.DataFrame(columns=['source', 'target'])
-
-    with open('response.json', 'r') as f:
-        data = json.load(f)
-        for element in data['args']:
-            # print(element)
-            # print(data['args'][element])
-            for obj in data['args'][element]:
-                # print('target', obj['target'])
-                # print('source', obj['source'])
-
-                # new_row = {'source': obj['source'], 'target': obj['target']}
-                new_row = {'source': str(obj['source']['value']) + ' ' + str(obj['source']['unit']), 'target': str(obj['target']['value']) + ' ' + str(obj['target']['unit'])}
-
-                df = pd.concat([df, pd.DataFrame([new_row])])
-
-    if df is not None:
-        st.table(df)
-
-    # st.json(json.loads(json.dumps(response, indent=4)))
 
 
 if __name__ == "__main__":
