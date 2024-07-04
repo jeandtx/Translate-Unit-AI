@@ -2,6 +2,14 @@
 
 Translate Unit AI is a powerful application designed to translate all units from an image or your camera to the units from your country. 🌍📸
 
+## Demo 📺
+
+
+https://github.com/jeandtx/Translate-Unit-AI/assets/75331707/5ab35b7b-ea1c-4a14-9a23-386d8d2f97c1
+
+
+
+
 ## Example Use Cases 🛠️
 - **French User**: Take a picture of a menu and all the prices are translated to €. 🇫🇷📋➡️💶
 - **British User in Paris**: Take a picture of a price tag while doing groceries, and the application will translate the weight and price to your local units and currency. 🇬🇧🛒➡️⚖️💷
